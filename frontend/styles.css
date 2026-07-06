@@ -1,0 +1,228 @@
+:root{
+    --cream: #FBF5EA;
+    --cream-deep: #F3E9D8;
+    --sage: #94AC8C;
+    --sage-deep: #6E8A66;
+    --blush: #F0C6C0;
+    --peach: #F0A87C;
+    --peach-deep: #E28F5B;
+    --lavender: #CBB9D8;
+    --ink: #3F372E;
+    --ink-soft: #766B5C;
+    --line: #E7DBC7;
+    --white: #FFFEFC;
+    --shadow: 0 12px 30px -12px rgba(90, 70, 40, 0.18);
+    --shadow-sm: 0 4px 14px -6px rgba(90, 70, 40, 0.16);
+    --radius: 24px;
+    --radius-sm: 14px;
+    font-family: 'Figtree', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: linear-gradient(180deg, #FDF3E4 0%, var(--cream) 22%, var(--cream) 100%);
+    color: var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{ font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; color:var(--ink); }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{ background:var(--peach); color:white;}
+
+  /* focus visibility - intentionally present everywhere EXCEPT one place (see defect #1) */
+  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible{
+    outline: 3px solid var(--sage-deep);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  .steam-decor{ position:absolute; opacity:0.55; pointer-events:none; }
+  .steam-decor path{ animation: drift 6s ease-in-out infinite; transform-origin:center; }
+  .steam-decor path:nth-child(2){ animation-delay: -2s; }
+  .steam-decor path:nth-child(3){ animation-delay: -4s; }
+  @keyframes drift{
+    0%,100%{ transform: translateY(0) scaleY(1); opacity:0.5;}
+    50%{ transform: translateY(-6px) scaleY(1.06); opacity:0.9;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .steam-decor path{ animation:none; }
+  }
+
+  /* ---------- App shell ---------- */
+  #app{ display:none; }
+  #app.active{ display:block; }
+
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background: rgba(251,245,234,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+    padding: 14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px; height:34px; }
+  .brand-name{ font-family:'Fraunces',serif; font-size:1.25rem; font-weight:600; }
+  .brand-name span{ color: var(--peach-deep); }
+
+  nav.tabs{ display:flex; gap:4px; background:var(--white); padding:5px; border-radius:100px; box-shadow: var(--shadow-sm); }
+  nav.tabs button{
+    border:none; background:transparent; padding:9px 16px; border-radius:100px;
+    font-size:0.86rem; font-weight:600; color:var(--ink-soft); cursor:pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+  nav.tabs button.active{ background: var(--sage); color:white; }
+  nav.tabs button:hover:not(.active){ background: var(--cream-deep); }
+
+  .avatar-btn{ width:40px;height:40px;border-radius:50%; background:var(--blush); border:2px solid var(--white); box-shadow:var(--shadow-sm); cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--ink); }
+
+  main{ max-width:1180px; margin:0 auto; padding: 34px 28px 90px; }
+  .view{ display:none; animation: fadeUp .35s ease; }
+  .view.active{ display:block; }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+  .card{ background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:22px; }
+  .pill{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:100px; font-size:0.74rem; font-weight:700; letter-spacing:.02em; }
+  .pill.sage{ background:#E7EFE3; color:var(--sage-deep); }
+  .pill.peach{ background:#FBE6D4; color:var(--peach-deep); }
+  .pill.blush{ background:#FBEAE7; color:#C4695F; }
+
+  .btn{ border:none; cursor:pointer; font-weight:700; border-radius:100px; padding:12px 22px; font-size:0.92rem; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+  .btn-primary{ background: linear-gradient(135deg, var(--peach), var(--peach-deep)); color:white; box-shadow: var(--shadow-sm); }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn-ghost{ background:var(--white); color:var(--ink); border:1.5px solid var(--line); }
+  .btn-ghost:hover{ background: var(--cream-deep); }
+  /* Defect #6: this variant intentionally has NO hover feedback (Generate Grocery List button) */
+  .btn-noHover{ background: var(--sage); color:white; }
+
+  /* ---------- Login ---------- */
+  #login-screen{
+    min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+    background: radial-gradient(circle at 20% 15%, #FCE8CF 0%, transparent 45%), radial-gradient(circle at 85% 80%, #E9E1CF 0%, transparent 40%), var(--cream);
+  }
+  .auth-card{ width:min(420px, 92vw); background:var(--white); border-radius:28px; box-shadow:var(--shadow); padding:40px 34px; position:relative; z-index:2; }
+  .auth-title{ font-size:1.7rem; margin:6px 0 4px; }
+  .auth-sub{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:26px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:0.8rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .field input{
+    width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line); background:var(--cream);
+    font-size:0.95rem; color:var(--ink);
+  }
+  /* Defect #1: password field intentionally excluded from focus-visible ring */
+  #password-field:focus{ outline:none; box-shadow:none; }
+  .field input:focus-visible{ outline:2.5px solid var(--sage-deep); outline-offset:1px; }
+  .auth-switch{ text-align:center; margin-top:18px; font-size:0.88rem; color:var(--ink-soft); }
+  .auth-switch a{ color:var(--peach-deep); font-weight:700; text-decoration:none; cursor:pointer; }
+  .auth-forgot{ text-align:right; font-size:0.8rem; color:var(--sage-deep); cursor:pointer; margin-top:-8px; margin-bottom:16px; font-weight:600;}
+
+  .modal-overlay{ position:fixed; inset:0; background:rgba(63,55,46,0.35); display:none; align-items:center; justify-content:center; z-index:100; }
+  .modal-overlay.active{ display:flex; }
+  .modal-box{ background:var(--white); border-radius:22px; padding:30px; width:min(400px,90vw); box-shadow:var(--shadow); }
+
+  /* ---------- Dashboard ---------- */
+  .hero{
+    border-radius: 28px; padding: 38px 34px; position:relative; overflow:hidden;
+    background: linear-gradient(120deg, #FBE9D4 0%, #F6DCE4 55%, #ECE3EF 100%);
+    margin-bottom:26px;
+  }
+  .hero h1{ font-size:2rem; margin:0 0 6px; }
+  .hero p{ color:var(--ink-soft); max-width:480px; }
+  .hero-plant{ position:absolute; top:-10px; right:26px; width:70px; }
+
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .grid-2{ display:grid; grid-template-columns:2fr 1fr; gap:20px; }
+  @media (max-width: 860px){ .grid-3{ grid-template-columns:1fr 1fr;} .grid-2{ grid-template-columns:1fr;} }
+  @media (max-width: 560px){ .grid-3{ grid-template-columns:1fr;} }
+
+  .section-title{ display:flex; align-items:center; justify-content:space-between; margin:30px 0 14px; }
+  .section-title h2{ font-size:1.3rem; margin:0; }
+
+  .meal-card{ display:flex; gap:14px; align-items:center; padding:14px; border-radius:18px; background:var(--cream); margin-bottom:10px; }
+  .meal-thumb{ width:56px; height:56px; border-radius:14px; flex-shrink:0; background:linear-gradient(135deg,var(--peach),var(--blush)); }
+  .meal-info h4{ margin:0 0 3px; font-size:0.95rem; }
+  .meal-info span{ font-size:0.78rem; color:var(--ink-soft); }
+
+  .quick-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .qa-btn{ display:flex; flex-direction:column; align-items:center; gap:8px; background:var(--white); border-radius:18px; padding:16px 18px; box-shadow:var(--shadow-sm); border:none; cursor:pointer; min-width:96px; }
+  /* Defect #4: icon sizes inconsistent across quick action buttons */
+  .qa-btn:nth-child(2) svg{ width:24px; height:24px; }
+  .qa-btn svg{ width:20px; height:20px; }
+  .qa-btn span{ font-size:0.78rem; font-weight:700; }
+
+  .alert-row{ display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px dashed var(--line); }
+  .alert-row:last-child{ border-bottom:none; }
+  .alert-dot{ width:10px; height:10px; border-radius:50%; background:var(--peach-deep); margin-top:6px; flex-shrink:0; }
+
+  /* ---------- Meal Planner ---------- */
+  .planner-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:14px; }
+  @media(max-width:960px){ .planner-grid{ grid-template-columns:repeat(4,1fr);} }
+  @media(max-width:620px){ .planner-grid{ grid-template-columns:repeat(2,1fr);} }
+  .day-col{ background:var(--white); border-radius:18px; padding:14px; box-shadow:var(--shadow-sm); }
+  .day-col h4{ margin:0 0 10px; font-size:0.85rem; text-align:center; color:var(--sage-deep); }
+  .day-col .slot{ background:var(--cream); border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:0.78rem; }
+  .day-col .slot b{ display:block; font-size:0.82rem; margin-bottom:2px; }
+  /* Defect #5: Saturday column has smaller padding than other days */
+  .day-col.sat .slot{ padding:5px 8px; }
+
+  /* ---------- Pantry ---------- */
+  .shelf{ margin-bottom:30px; }
+  .shelf-label{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .shelf-label .line{ flex:1; height:1px; background:var(--line); }
+  .ingredient-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media(max-width:960px){ .ingredient-grid{ grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:768px){ .ingredient-grid{ grid-template-columns:repeat(2,1fr);} }
+  .ing-card{ background:var(--white); border-radius:18px; padding:14px; box-shadow:var(--shadow-sm); position:relative; }
+  .ing-emoji{ width:44px; height:44px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:10px; }
+  .ing-card h4{ margin:0 0 3px; font-size:0.88rem; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  /* Defect #8: at tablet breakpoint the ellipsis is dropped so long names cut off abruptly */
+  @media(max-width:900px) and (min-width:769px){ .ing-card h4{ text-overflow:clip; } }
+  .ing-card span{ font-size:0.74rem; color:var(--ink-soft); }
+  .ing-check{ position:absolute; top:12px; right:12px; width:20px; height:20px; border-radius:6px; border:2px solid var(--line); cursor:pointer; }
+  /* Defect #7: clickable area (::after hit zone) intentionally smaller than the visual box, misaligned */
+  .ing-check::after{ content:""; position:absolute; inset:6px 6px -2px -2px; }
+
+  /* ---------- Recipes ---------- */
+  .recipe-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media(max-width:960px){ .recipe-grid{ grid-template-columns:repeat(2,1fr);} }
+  /* Defect #9: at exactly 768px the grid collapses oddly (min-width gap creates 1-column overlap) */
+  @media(max-width:768px) and (min-width:701px){ .recipe-grid{ grid-template-columns:1.3fr 1fr; gap:6px; } }
+  @media(max-width:700px){ .recipe-grid{ grid-template-columns:1fr; } }
+  .recipe-card{ background:var(--white); border-radius:20px; overflow:hidden; box-shadow:var(--shadow-sm); cursor:pointer; transition:transform .2s ease; }
+  .recipe-card:hover{ transform:translateY(-4px); }
+  .recipe-photo{ height:150px; background:linear-gradient(135deg,var(--blush),var(--peach)); }
+  .recipe-body{ padding:16px; }
+  .recipe-body h4{ margin:0 0 8px; font-size:1rem; }
+  .recipe-meta{ display:flex; gap:10px; font-size:0.76rem; color:var(--ink-soft); }
+
+  .recipe-detail-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+  @media(max-width:700px){ .recipe-detail-grid{ grid-template-columns:1fr; } }
+  .tooltip-wrap{ position:relative; display:inline-block; }
+  .tooltip-bubble{ position:absolute; bottom:130%; left:50%; transform:translateX(-50%); background:var(--ink); color:white; font-size:0.72rem; padding:6px 10px; border-radius:8px; white-space:nowrap; display:none; }
+  .tooltip-wrap:hover .tooltip-bubble{ display:block; }
+  /* Defect #11: no clamping logic — near the right screen edge the tooltip clips off-screen */
+
+  /* ---------- Grocery ---------- */
+  .grocery-group{ margin-bottom:22px; }
+  .grocery-item{ display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--white); border-radius:14px; margin-bottom:8px; box-shadow:var(--shadow-sm); }
+  .grocery-item input{ width:18px; height:18px; accent-color: var(--sage-deep); }
+  .grocery-item span{ flex:1; font-size:0.92rem; }
+  .grocery-item .qty{ font-size:0.78rem; color:var(--ink-soft); }
+
+  /* Toast */
+  .toast{ position:fixed; bottom:26px; right:26px; background:var(--ink); color:white; padding:13px 20px; border-radius:14px; font-size:0.86rem; font-weight:600; box-shadow:var(--shadow); opacity:0; transform:translateY(10px); transition:.25s ease; z-index:200; }
+  .toast.show{ opacity:1; transform:none; }
+  /* Defect #12: toast rendered left-aligned instead of matching the right-docked design-system position */
+  .toast.grocery-toast{ right:auto; left:26px; }
+
+  /* Empty / Profile */
+  .empty-state{ text-align:center; padding:50px 20px; }
+  .empty-illustration{ width:120px; margin:0 auto 18px; }
+  @media(max-width:480px){ .empty-illustration{ width:220px; } }
+  /* Defect #15: illustration balloons oversized on mobile instead of scaling down */
+
+  footer.appfoot{ text-align:center; padding:30px; color:var(--ink-soft); font-size:0.8rem; }
+
+  .skip-link{ position:absolute; left:-999px; top:0; background:var(--ink); color:white; padding:10px 16px; border-radius:8px; z-index:999; }
+  .skip-link:focus{ left:12px; top:12px; }

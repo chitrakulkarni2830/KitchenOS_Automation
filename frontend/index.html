@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KitchenOS — Sunday Morning Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ============ LOGIN / REGISTER ============ -->
+<div id="login-screen">
+  <svg class="steam-decor" style="top:8%; left:10%;" width="60" height="90" viewBox="0 0 60 90" aria-hidden="true">
+    <path d="M20 80 C10 60, 30 55, 20 35 C10 15, 30 10, 24 0" stroke="#E2C79A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M35 85 C25 65, 45 60, 35 40 C25 20, 45 15, 39 5" stroke="#EAD2AC" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <div class="auth-card" id="login-view">
+    <div class="pill sage">☕ Good morning</div>
+    <h1 class="auth-title">Welcome to KitchenOS</h1>
+    <p class="auth-sub">Sign in and let's plan a beautiful week of meals.</p>
+    <div class="field">
+      <label for="email-field">Email</label>
+      <input id="email-field" type="email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="password-field">Password</label>
+      <input id="password-field" type="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="auth-forgot" onclick="openModal('forgot-modal')">Forgot password?</div>
+    <button class="btn btn-primary" style="width:100%;" onclick="enterApp()">Sign in</button>
+    <div class="auth-switch">New here? <a onclick="toggleAuth('register')">Create an account</a></div>
+  </div>
+
+  <div class="auth-card" id="register-view" style="display:none;">
+    <div class="pill peach">🍑 Join the kitchen</div>
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">A calmer way to plan meals and manage your pantry.</p>
+    <div class="field"><label for="reg-name">Full name</label><input id="reg-name" type="text" placeholder="Chitra Sharma"></div>
+    <div class="field"><label for="reg-email">Email</label><input id="reg-email" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label for="reg-pass">Password</label><input id="reg-pass" type="password" placeholder="Create a password"></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="enterApp()">Create account</button>
+    <div class="auth-switch">Already have an account? <a onclick="toggleAuth('login')">Sign in</a></div>
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal-overlay" id="forgot-modal">
+  <div class="modal-box">
+    <h3 style="margin-top:0;">Reset your password</h3>
+    <p style="color:var(--ink-soft); font-size:0.9rem;">We'll email you a link to get back into your kitchen.</p>
+    <div class="field"><label for="forgot-email">Email</label><input id="forgot-email" type="email" placeholder="you@example.com"></div>
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeModal('forgot-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('forgot-modal')">Send link</button>
+    </div>
+  </div>
+</div>
+<!-- Defect #2: this modal intentionally does not close on Escape key (only via buttons) -->
+
+<!-- ============ MAIN APP ============ -->
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" fill="#F0C6C0"/><path d="M12 22c0-6 4-10 8-10s8 4 8 10-4 7-8 7-8-1-8-7z" fill="#FBF5EA"/><path d="M16 12c0-2 2-4 2-4M22 12c0-2-2-4-2-4" stroke="#E28F5B" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      <div class="brand-name">Kitchen<span>OS</span></div>
+    </div>
+    <nav class="tabs" id="tabnav">
+      <button class="active" data-view="dashboard">Dashboard</button>
+      <button data-view="planner">Meal Planner</button>
+      <button data-view="pantry">Pantry</button>
+      <button data-view="recipes">Recipes</button>
+      <button data-view="grocery">Grocery List</button>
+      <button data-view="profile">Profile</button>
+    </nav>
+    <div class="avatar-btn" tabindex="0" onclick="switchView('profile')">C</div>
+  </div>
+
+  <main id="main-content">
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <div class="hero">
+        <svg class="hero-plant" viewBox="0 0 60 90"><path d="M30 90V40" stroke="#8FA37E" stroke-width="3"/><ellipse cx="20" cy="35" rx="14" ry="9" fill="#A9C299" transform="rotate(-20 20 35)"/><ellipse cx="40" cy="30" rx="14" ry="9" fill="#94AC8C" transform="rotate(20 40 30)"/></svg>
+        <h1>Good morning, Chitra ☀️</h1>
+        <p>Sunlight's coming through the window and coffee's brewing — here's what's cooking this week.</p>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="section-title"><h2>Today's meals</h2><span class="pill sage">3 planned</span></div>
+          <div class="card">
+            <div class="meal-card"><div class="meal-thumb"></div><div class="meal-info"><h4>Masala Oats & Berries</h4><span>Breakfast · 8:00 AM</span></div></div>
+            <div class="meal-card"><div class="meal-thumb"></div><div class="meal-info"><h4>Paneer Bhurji Wrap</h4><span>Lunch · 1:00 PM</span></div></div>
+            <div class="meal-card"><div class="meal-thumb"></div><div class="meal-info"><h4>Lemon Herb Khichdi</h4><span>Dinner · 8:30 PM</span></div></div>
+          </div>
+
+          <div class="section-title"><h2>Quick actions</h2></div>
+          <div class="quick-actions">
+            <button class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--sage-deep)" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span>Add meal</span></button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--peach-deep)" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><span>Scan pantry</span></button>
+            <button class="qa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--sage-deep)" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>New list</span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title"><h2>Pantry alerts</h2></div>
+          <div class="card">
+            <div class="alert-row"><div class="alert-dot"></div><div><b style="font-size:0.88rem;">Spinach</b><div style="font-size:0.78rem; color:var(--ink-soft);">Expires in 1 day</div></div></div>
+            <div class="alert-row"><div class="alert-dot"></div><div><b style="font-size:0.88rem;">Greek Yogurt</b><div style="font-size:0.78rem; color:var(--ink-soft);">Expires in 2 days</div></div></div>
+            <div class="alert-row"><div class="alert-dot"></div><div><b style="font-size:0.88rem;">Coriander</b><div style="font-size:0.78rem; color:var(--ink-soft);">Expires today</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEAL PLANNER -->
+    <section class="view" id="view-planner">
+      <div class="section-title"><h2>This week</h2><button class="btn btn-noHover" onclick="showToast('Grocery list generated from this week\'s meals')">Generate grocery list</button></div>
+      <div class="planner-grid">
+        <div class="day-col"><h4>Mon</h4><div class="slot"><b>Oats & Berries</b>Breakfast</div><div class="slot"><b>Rajma Rice</b>Lunch</div><div class="slot"><b>Veg Soup</b>Dinner</div></div>
+        <div class="day-col"><h4>Tue</h4><div class="slot"><b>Poha</b>Breakfast</div><div class="slot"><b>Paneer Wrap</b>Lunch</div><div class="slot"><b>Khichdi</b>Dinner</div></div>
+        <div class="day-col"><h4>Wed</h4><div class="slot"><b>Smoothie Bowl</b>Breakfast</div><div class="slot"><b>Dal Tadka</b>Lunch</div><div class="slot"><b>Grilled Veg</b>Dinner</div></div>
+        <div class="day-col"><h4>Thu</h4><div class="slot"><b>Upma</b>Breakfast</div><div class="slot"><b>Chole</b>Lunch</div><div class="slot"><b>Soup & Toast</b>Dinner</div></div>
+        <div class="day-col"><h4>Fri</h4><div class="slot"><b>Idli</b>Breakfast</div><div class="slot"><b>Fried Rice</b>Lunch</div><div class="slot"><b>Pizza Night</b>Dinner</div></div>
+        <div class="day-col sat"><h4>Sat</h4><div class="slot"><b>Pancakes</b>Breakfast</div><div class="slot"><b>Biryani</b>Lunch</div><div class="slot"><b>Tacos</b>Dinner</div></div>
+        <div class="day-col"><h4>Sun</h4><div class="slot"><b>Sunday Brunch</b>Brunch</div><div class="slot"><b>Leftovers</b>Lunch</div><div class="slot"><b>Family Thali</b>Dinner</div></div>
+      </div>
+    </section>
+
+    <!-- PANTRY -->
+    <section class="view" id="view-pantry">
+      <div class="section-title"><h2>Your pantry shelves</h2></div>
+
+      <div class="shelf">
+        <div class="shelf-label"><span class="pill sage">🥬 Vegetables</span><div class="line"></div></div>
+        <div class="ingredient-grid">
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🥬</div><h4>Spinach</h4><span>320g left</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🍅</div><h4>Tomatoes</h4><span>6 pcs</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🧅</div><h4>Extra Virgin Cold-Pressed Onion Sprouts</h4><span>1.2 kg</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🥕</div><h4>Carrots</h4><span>500g</span></div>
+        </div>
+      </div>
+
+      <div class="shelf">
+        <div class="shelf-label"><span class="pill peach">🥛 Dairy</span><div class="line"></div></div>
+        <div class="ingredient-grid">
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🧀</div><h4>Paneer</h4><span>250g</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🥛</div><h4>Milk</h4><span>1L</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🍦</div><h4>Greek Yogurt</h4><span>400g</span></div>
+        </div>
+      </div>
+
+      <div class="shelf">
+        <div class="shelf-label"><span class="pill blush">🌾 Grains &amp; Pulses</span><div class="line"></div></div>
+        <div class="ingredient-grid">
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🍚</div><h4>Basmati Rice</h4><span>2kg</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🫘</div><h4>Rajma</h4><span>500g</span></div>
+          <div class="ing-card"><div class="ing-check"></div><div class="ing-emoji">🌾</div><h4>Wheat Flour</h4><span>5kg</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECIPES -->
+    <section class="view" id="view-recipes">
+      <div class="section-title"><h2>Recipe explorer</h2><span class="pill sage">24 recipes</span></div>
+      <div class="recipe-grid">
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Lemon Herb Khichdi</h4><div class="recipe-meta"><span>⏱ 30 min</span><span>🔥 320 kcal</span><span>🍽 2 servings</span></div></div></div>
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Paneer Bhurji Wrap</h4><div class="recipe-meta"><span>⏱ 20 min</span><span>🔥 410 kcal</span><span>🍽 1 serving</span></div></div></div>
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Sunday Morning Pancakes</h4><div class="recipe-meta"><span>⏱ 25 min</span><span>🔥 380 kcal</span><span>🍽 3 servings</span></div></div></div>
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Chickpea Buddha Bowl</h4><div class="recipe-meta"><span>⏱ 22 min</span><span>🔥 350 kcal</span><span>🍽 2 servings</span></div></div></div>
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Masoor Dal Soup</h4><div class="recipe-meta"><span>⏱ 35 min</span><span>🔥 260 kcal</span><span>🍽 4 servings</span></div></div></div>
+        <div class="recipe-card" onclick="openRecipe()"><div class="recipe-photo"></div><div class="recipe-body"><h4>Herbed Grilled Veg</h4><div class="recipe-meta"><span>⏱ 18 min</span><span>🔥 210 kcal</span><span>🍽 2 servings</span></div></div></div>
+      </div>
+    </section>
+
+    <!-- GROCERY LIST -->
+    <section class="view" id="view-grocery">
+      <div class="section-title"><h2>Grocery list</h2><button class="btn btn-primary" onclick="showToast('Item added', true)">+ Add item</button></div>
+
+      <div class="grocery-group">
+        <div class="shelf-label"><span class="pill sage">🥬 Vegetables</span><div class="line"></div></div>
+        <label class="grocery-item"><input type="checkbox"><span>Spinach</span><span class="qty">2 bunches</span></label>
+        <label class="grocery-item"><input type="checkbox"><span>Tomatoes</span><span class="qty">1 kg</span></label>
+      </div>
+      <div class="grocery-group">
+        <div class="shelf-label"><span class="pill peach">🥛 Dairy</span><div class="line"></div></div>
+        <label class="grocery-item"><input type="checkbox"><span>Milk</span><span class="qty">2 L</span></label>
+        <label class="grocery-item"><input type="checkbox"><span>Paneer</span><span class="qty">500 g</span></label>
+      </div>
+      <div class="grocery-group">
+        <div class="shelf-label"><span class="pill blush">🧂 Spices &amp; Household</span><div class="line"></div></div>
+        <label class="grocery-item"><input type="checkbox"><span>Turmeric powder</span><span class="qty">100 g</span></label>
+        <label class="grocery-item"><input type="checkbox"><span>Dish soap</span><span class="qty">1 bottle</span></label>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="view" id="view-profile">
+      <div class="section-title"><h2>Household members</h2></div>
+      <div class="card empty-state">
+        <svg class="empty-illustration" viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#F0C6C0"/><path d="M20 90c0-20 13-32 30-32s30 12 30 32" fill="#CBB9D8"/></svg>
+        <h3>No household members yet</h3>
+        <p style="color:var(--ink-soft); font-size:0.9rem; max-width:320px; margin:0 auto 18px;">Invite someone to plan meals and share the grocery list together.</p>
+        <button class="btn btn-primary">Invite a member</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="appfoot">KitchenOS · Sunday Morning Kitchen · Sprint 1 build</footer>
+</div>
+
+<!-- RECIPE DETAIL MODAL -->
+<div class="modal-overlay" id="recipe-modal">
+  <div class="modal-box" style="width:min(600px,92vw); max-height:86vh; overflow:auto;">
+    <div class="recipe-photo" style="border-radius:16px; height:180px;"></div>
+    <h2 style="margin:16px 0 4px;">Lemon Herb Khichdi</h2>
+    <div class="recipe-meta" style="margin-bottom:10px;">
+      <span>⏱ 30 min</span>&nbsp;&nbsp;<span>🔥 320 kcal</span>&nbsp;&nbsp;
+      <span class="tooltip-wrap" tabindex="0">🥩 18g protein
+        <span class="tooltip-bubble">18g protein per serving, mostly from moong dal</span>
+      </span>
+      &nbsp;&nbsp;<span>🍽 2 servings</span>&nbsp;&nbsp;<span>Easy</span>
+    </div>
+    <div class="recipe-detail-grid">
+      <div>
+        <h3 style="font-size:1rem;">Ingredients</h3>
+        <ul style="font-size:0.88rem; color:var(--ink-soft); padding-left:18px;" tabindex="0">
+          <li>1 cup rice</li><li>½ cup moong dal</li><li>1 tsp ghee</li><li>1 lemon, juiced</li><li>Fresh coriander</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;">Instructions</h3>
+        <ol style="font-size:0.88rem; color:var(--ink-soft); padding-left:18px;">
+          <li>Rinse rice and dal together.</li>
+          <li>Pressure cook with turmeric and salt for 3 whistles.</li>
+          <li>Stir in ghee, lemon juice, and coriander before serving.</li>
+        </ol>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <!-- Defect #10: close button placed here in DOM order comes right after the ingredients list in tab order, skipping past the instructions column -->
+      <button class="btn btn-ghost" onclick="closeModal('recipe-modal')" id="recipe-close-btn">Close</button>
+      <button class="btn btn-primary">Add to meal plan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
