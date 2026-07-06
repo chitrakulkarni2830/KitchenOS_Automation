@@ -1,0 +1,133 @@
+# KitchenOS: Project Directory Structure Reference
+
+**Purpose**: Definitive project directory mapping and architecture layout representing the physical codebase organization.  
+**Version**: 1.0.0  
+**Author**: KitchenOS Core Engineering Team  
+**Last Updated**: July 6, 2026  
+
+---
+
+## Table of Contents
+1. [Physical Codebase Folder Tree](#1-physical-codebase-folder-tree)
+2. [Folder Reference Guide](#2-folder-reference-guide)
+3. [Configuration & Environment Configuration](#3-configuration--environment-configuration)
+4. [Guidelines for Repository Expansion](#4-guidelines-for-repository-expansion)
+
+---
+
+## 1. Physical Codebase Folder Tree
+
+The directory tree below outlines the complete structure of the KitchenOS monorepo:
+
+```
+kitchen-os/ (Project Root)
+├── .github/
+│   └── workflows/                # CI/CD pipelines (GitHub Actions)
+│       ├── pr-validation.yml     # Code validation on Pull Request
+│       └── staging-deploy.yml    # Build and deploy to staging on merge
+│
+├── assets/                       # Static media resources
+│   ├── branding/                 # Corporate logos, favicon icons
+│   └── mocks/                    # Mock JSON data for offline tests
+│
+├── automation/                   # Automated E2E testing
+│   ├── tests/                    # E2E Playwright test scripts (JavaScript)
+│   │   ├── auth.spec.js          # Auth and login flows
+│   │   └── inventory.spec.js     # Inventory workflow checks
+│   ├── fixtures/
+│   │   └── page-objects/         # Page Object Model (POM) references
+│   │       ├── login.page.js     # Login page selector helper
+│   │       └── inventory.page.js # Inventory page selector helper
+│   ├── playwright.config.js      # E2E runner configuration
+│   └── package.json              # E2E dependencies & script definitions
+│
+├── backend/                      # Python Modular Backend codebase
+│   ├── routes/                   # API Routing Controllers
+│   │   ├── auth.py               # Auth routes
+│   │   ├── recipes.py            # Recipes CRUD routes
+│   │   ├── inventory.py          # Inventory CRUD routes
+│   │   └── pos.py                # POS webhook route
+│   ├── services/                 # Application Business Logic
+│   │   ├── auth_service.py       # Password validation and JWT generation
+│   │   ├── costing_service.py    # Recipe costing calculation
+│   │   └── inventory_service.py  # Inventory adjustments logic
+│   ├── models/                   # Database entities mapping
+│   │   ├── user.py               # User DB model
+│   │   ├── recipe.py             # Recipe DB model
+│   │   └── inventory.py          # Inventory DB model
+│   ├── utils/                    # Common helper modules
+│   │   ├── database.py           # SQLite connection pools helper
+│   │   └── security.py           # Password hashing & JWT checkers
+│   ├── tests/                    # Backend unit and integration tests
+│   │   └── conftest.py           # PyTest test setups
+│   ├── requirements.txt          # Production backend dependencies
+│   └── Dockerfile                # Deployment container packaging
+│
+├── config/                       # Central environment variables & setup
+│   ├── env.development           # Development env template (SQLite configuration)
+│   ├── env.staging               # Staging env template (SQLite/PostgreSQL setup)
+│   └── env.production            # Production env template (PostgreSQL database configuration)
+│
+├── database/                     # SQLite database configurations
+│   ├── schema.sql                # Relational schema definition (SQLite)
+│   ├── migration.py              # Custom SQLite migration manager script
+│   └── seeds/                    # Seed scripts for initial inventories
+│
+├── docs/                         # Repository engineering docs (This directory)
+│   ├── architecture/             # Deep dive architecture sheets
+│   ├── planning/                 # Business requirements & scope definitions
+│   ├── releases/                 # Formal releases descriptions
+│   └── sprints/                  # Sprints definitions
+│
+├── frontend/                     # Vanilla JS + Tailwind Frontend
+│   ├── css/                      # Stylesheets directory
+│   │   └── styles.css            # Base stylesheet with Tailwind directives
+│   ├── js/                       # Vanilla Javascript code modules
+│   │   ├── app.js                # Core controller and routing module
+│   │   ├── auth.js               # Login and session handling logic
+│   │   └── inventory.js          # DOM manipulation for inventory views
+│   ├── tailwind.config.js        # Tailwind configuration
+│   └── index.html                # Main application portal entry template
+│
+├── postman/                      # Postman collections & environment scripts
+│   ├── KitchenOS.postman_collection.json # Standard API collections definition
+│   └── Dev.postman_environment.json      # Dev environment variables
+│
+├── reports/                      # Autogenerated pipeline run summaries
+│   ├── coverage/                 # Unit test coverage reports
+│   └── test-results/             # Playwright E2E and Postman test reports
+│
+└── scripts/                      # Deployment and maintenance CLI utilities
+    ├── run-migrations.sh         # DB migrations entrypoint
+    └── seed-data.sh              # Local database seeder wrapper
+```
+
+---
+
+## 2. Folder Reference Guide
+
+*   **`frontend/`**: Standard HTML5, CSS3, Tailwind CSS, and Vanilla JavaScript. Native browser APIs drive layout rendering and user interactions.
+*   **`backend/`**: Modular Python API service. Clean division of routing operations (`routes/`), business models (`models/`), transactional scripts (`services/`), and helpers (`utils/`).
+*   **`postman/`**: Houses API collection testing parameters, environments configurations, and tests scripts designed to run locally or in CI pipelines.
+*   **`automation/`**: Runs out-of-process. Contains Playwright tests in JavaScript that verify system behaviors across browsers.
+*   **`database/`**: Dedicated schema definitions for SQLite databases, with adaptation rules mapping towards future PostgreSQL schemas.
+
+---
+
+## 3. Configuration & Environment Configuration
+
+Configuration is separated by environments and loaded using environment files:
+
+| Environment File | Database Engine Target | Secret Management |
+| :--- | :--- | :--- |
+| `config/env.development` | SQLite | Stored in repository (non-sensitive defaults). |
+| `config/env.staging` | SQLite / PostgreSQL | Loaded via CI/CD injection / variables. |
+| `config/env.production`| PostgreSQL | Managed via Secure KMS / Cloud Secret Manager. |
+
+---
+
+## 4. Guidelines for Repository Expansion
+
+1.  **Strict Isolation**: Backend services in `services/` must remain independent of API controllers routing logic.
+2.  **Tailwind Compilation**: Avoid adding custom ad-hoc CSS rules. Use Tailwind classes directly in HTML elements, compiling updates via the PostCSS cli tool.
+3.  **No Frameworks**: Do not import React, Next.js, or Vue components. Keep Javascript clean, using modular file imports (`type="module"` in script tags).
