@@ -1,0 +1,5 @@
+# KitchenOS Backend Requirements
+# Since we adopt standard python library services (http.server, sqlite3, hmac, hashlib)
+# for the modular REST API foundation, there are no mandatory production dependencies!
+#
+# Development dependencies can be found in requirements-dev.txt
